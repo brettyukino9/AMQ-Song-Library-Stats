@@ -3,7 +3,7 @@ import pandas as pd
 with open('amq_stats.json', 'rb') as file:
     data = json.load(file)
 
-data_list = pd.DataFrame(columns=['song', 'artist', 'anime', 'plays', 'correct count', 'percentage'])
+data_list = pd.DataFrame(columns=['song', 'artist', 'type', 'anime', 'plays', 'correct count', 'percentage'])
 list = []
 for songid in data:
     entry = data[songid]
@@ -39,12 +39,18 @@ print(f'Learned entries (>80%): {above_80 / total_entries * 100}%')
 print(f'Unlearned entries (<80%): {unlearned / total_entries * 100}%')
 print(f'Unplayed entries: {unplayed / total_entries * 100}%')
 
+openings = data_list[data_list['song'].str.contains('OP')]
+
 
 # group data_list by anime
 data_list_anime = data_list.groupby('anime').agg({'plays': 'sum', 'correct count': 'sum'}).reset_index()
 data_list_anime['percentage'] = (data_list_anime['correct count'] / data_list_anime['plays']) * 100
 data_list_anime = data_list_anime.sort_values(by='percentage', ascending=False)
 data_list_anime.to_csv('amq_stats_anime.csv', index=False)
+
+data_list_anime_unlearned = data_list_anime[data_list_anime['percentage'] < 60]
+data_list_anime_unlearned = data_list_anime_unlearned.sort_values(by='plays', ascending=False)
+data_list_anime_unlearned.to_csv('amq_anime_to_learn.csv', index=False)
 
 # group data_list by artist
 data_list_artist = data_list.groupby('artist').agg({'plays': 'sum', 'correct count': 'sum'}).reset_index()

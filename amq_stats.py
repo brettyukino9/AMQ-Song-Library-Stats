@@ -30,7 +30,7 @@ for songid in data:
 
 data_list = pd.DataFrame(list, columns=['song', 'artist', 'diff','anime', 'type','plays', 'correct count', 'percentage', 'recent percentage'])
 data_list = data_list.sort_values(by='plays', ascending=False)
-data_list.to_csv('amq_stats.csv', index=False)
+data_list.to_csv('amq_song_stats.csv', index=False)
 
 
 total_entries = len(data_list)
@@ -139,3 +139,8 @@ data_list_artist.to_csv('amq_stats_artist.csv', index=False)
 unlearned_df = data_list[(data_list['percentage'] < 50) & (data_list['plays'] > 0)]
 unlearned_df = unlearned_df.sort_values(by='plays', ascending=False)
 unlearned_df.to_csv('amq_songs_to_learn.csv', index=False)
+
+# Not Known Songs
+not_known_df = data_list[(data_list['correct count'] == 0) & (data_list['plays'] > 0)]
+not_known_df = not_known_df.sort_values(by='plays', ascending=False)
+not_known_df.to_csv('amq_songs_never_got.csv', index=False)

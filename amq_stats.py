@@ -1,6 +1,6 @@
 import json
 import pandas as pd
-with open('amq_stats2.json', 'rb') as file:
+with open('amq_stats-nick.json', 'rb') as file:
     data = json.load(file)
 
 types = ['OP', 'ED', 'IN']
@@ -30,7 +30,7 @@ for songid in data:
 
 data_list = pd.DataFrame(list, columns=['song', 'artist', 'diff','anime', 'type','plays', 'correct count', 'percentage', 'recent percentage'])
 data_list = data_list.sort_values(by='plays', ascending=False)
-data_list.to_csv('amq_song_stats.csv', index=False)
+data_list.to_csv('amq_stats_songs.csv', index=False)
 
 
 total_entries = len(data_list)
@@ -52,8 +52,8 @@ print("--------------------")
 print(f'Total entries: {total_entries}')
 print(f"Guess rate: {data_list['correct count'].sum()} / {data_list['plays'].sum()} {data_list['correct count'].sum() / data_list['plays'].sum() * 100}%")
 print(f"Gettable %: {len(data_list[data_list['correct count'] > 0])} / {total_entries} {len(data_list[data_list['correct count'] > 0]) / total_entries * 100}%")
-print(f'Learned entries (>80%): {len(learned)} / {total_entries} {len(learned) / total_entries * 100}%')
-print(f'Unlearned entries (<80%): {len(unlearned)} / {total_entries} {len(unlearned) / total_entries * 100}%')
+print(f'Learned entries (>70%): {len(learned)} / {total_entries} {len(learned) / total_entries * 100}%')
+print(f'Unlearned entries (<70%): {len(unlearned)} / {total_entries} {len(unlearned) / total_entries * 100}%')
 print(f'Unplayed entries: {len(unplayed)} / {total_entries} {len(unplayed) / total_entries * 100}%')
 print("--------------------")
 # OP / ED / IN Stats
@@ -71,9 +71,9 @@ print("Openings unplayed %: ", len(unplayed[unplayed['type'] == 'OP']) / len(ope
 op_under_30 = openings[openings['diff'] < 30]
 print(f"Openings under 30 guess rate %: {op_under_30['correct count'].sum()} / {op_under_30['plays'].sum()} ", op_under_30['correct count'].sum() / op_under_30['plays'].sum() * 100)
 print(f"Openings under 30 gettable %: {len(op_under_30[op_under_30['correct count'] > 0])} / {len(op_under_30)} ", len(op_under_30[op_under_30['correct count'] > 0]) / len(op_under_30) * 100)
-print(f"Openings under 30 openings learned %: {len(learned[(learned['type'] == 'OP') & (learned['diff'] < 30)])} / {len(op_under_30)}", len(learned[(learned['type'] == 'OP') & (learned['diff'] < 30)]) / len(op_under_30) * 100)
-print("Openings under 30 openings unlearned %: ", len(unlearned[(unlearned['type'] == 'OP') & (unlearned['diff'] < 30)]) / len(op_under_30) * 100)
-print("Openings under 30 openings unplayed %: ", len(unplayed[(unplayed['type'] == 'OP') & (unplayed['diff'] < 30)]) / len(op_under_30) * 100)
+print(f"Openings under 30 learned %: {len(learned[(learned['type'] == 'OP') & (learned['diff'] < 30)])} / {len(op_under_30)}", len(learned[(learned['type'] == 'OP') & (learned['diff'] < 30)]) / len(op_under_30) * 100)
+print("Openings under 30 unlearned %: ", len(unlearned[(unlearned['type'] == 'OP') & (unlearned['diff'] < 30)]) / len(op_under_30) * 100)
+print("Openings under 30 unplayed %: ", len(unplayed[(unplayed['type'] == 'OP') & (unplayed['diff'] < 30)]) / len(op_under_30) * 100)
 print("--------------------")
 
 ## Endings
@@ -86,9 +86,9 @@ print("Endings unplayed %: ", len(unplayed[unplayed['type'] == 'ED']) / len(endi
 end_under_30 = endings[endings['diff'] < 30]
 print(f"Endings under 30 guess rate %: {end_under_30['correct count'].sum()} / {end_under_30['plays'].sum()} ", end_under_30['correct count'].sum() / end_under_30['plays'].sum() * 100)
 print(f"Endings under 30 gettable %: {len(end_under_30[end_under_30['correct count'] > 0])} / {len(end_under_30)} ", len(end_under_30[end_under_30['correct count'] > 0]) / len(end_under_30) * 100)
-print(f"Endings under 30 openings learned %: {len(learned[(learned['type'] == 'ED') & (learned['diff'] < 30)])} / {len(end_under_30)}", len(learned[(learned['type'] == 'ED') & (learned['diff'] < 30)]) / len(end_under_30) * 100)
-print("Endings under 30 openings unlearned %: ", len(unlearned[(unlearned['type'] == 'ED') & (unlearned['diff'] < 30)]) / len(end_under_30) * 100)
-print("Endings under 30 openings unplayed %: ", len(unplayed[(unplayed['type'] == 'ED') & (unplayed['diff'] < 30)]) / len(end_under_30) * 100)
+print(f"Endings under 30 learned %: {len(learned[(learned['type'] == 'ED') & (learned['diff'] < 30)])} / {len(end_under_30)}", len(learned[(learned['type'] == 'ED') & (learned['diff'] < 30)]) / len(end_under_30) * 100)
+print("Endings under 30 unlearned %: ", len(unlearned[(unlearned['type'] == 'ED') & (unlearned['diff'] < 30)]) / len(end_under_30) * 100)
+print("Endings under 30 unplayed %: ", len(unplayed[(unplayed['type'] == 'ED') & (unplayed['diff'] < 30)]) / len(end_under_30) * 100)
 print("--------------------")
 
 ## Inserts
@@ -101,9 +101,9 @@ print("Inserts unplayed %: ", len(unplayed[unplayed['type'] == 'IN']) / len(inse
 in_under_30 = inserts[inserts['diff'] < 30]
 print(f"Inserts under 30 guess rate %: {in_under_30['correct count'].sum()} / {in_under_30['plays'].sum()} ", in_under_30['correct count'].sum() / in_under_30['plays'].sum() * 100)
 print(f"Inserts under 30 gettable %: {len(in_under_30[in_under_30['correct count'] > 0])} / {len(in_under_30)} ", len(in_under_30[in_under_30['correct count'] > 0]) / len(in_under_30) * 100)
-print(f"Inserts under 30 openings learned %: {len(learned[(learned['type'] == 'IN') & (learned['diff'] < 30)])} / {len(in_under_30)}", len(learned[(learned['type'] == 'IN') & (learned['diff'] < 30)]) / len(in_under_30) * 100)
-print("Inserts under 30 openings unlearned %: ", len(unlearned[(unlearned['type'] == 'IN') & (unlearned['diff'] < 30)]) / len(in_under_30) * 100)
-print("Inserts under 30 openings unplayed %: ", len(unplayed[(unplayed['type'] == 'IN') & (unplayed['diff'] < 30)]) / len(in_under_30) * 100)
+print(f"Inserts under 30 learned %: {len(learned[(learned['type'] == 'IN') & (learned['diff'] < 30)])} / {len(in_under_30)}", len(learned[(learned['type'] == 'IN') & (learned['diff'] < 30)]) / len(in_under_30) * 100)
+print("Inserts under 30 unlearned %: ", len(unlearned[(unlearned['type'] == 'IN') & (unlearned['diff'] < 30)]) / len(in_under_30) * 100)
+print("Inserts under 30 unplayed %: ", len(unplayed[(unplayed['type'] == 'IN') & (unplayed['diff'] < 30)]) / len(in_under_30) * 100)
 print("--------------------")
 # Under 30 stats overall
 under_30_songs = data_list[data_list['diff'] < 30]
